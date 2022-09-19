@@ -29,35 +29,36 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+// Credits to Samsung, all rights reserved to the original owners.
+
 @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
-/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
 public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable, SectionIndexer {
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.1
-        @Override // java.util.Comparator
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING = new Comparator<AppPickerView.AppLabelInfo>() {
+        @Override
         public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
             Collator collator = Collator.getInstance(Locale.getDefault());
             collator.setStrength(2);
             return collator.compare(appLabelInfo.getLabel(), appLabelInfo2.getLabel());
         }
     };
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING_IGNORE_CASE = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.2
-        @Override // java.util.Comparator
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING_IGNORE_CASE = new Comparator<AppPickerView.AppLabelInfo>() {
+        @Override
         public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
             Collator collator = Collator.getInstance(Locale.getDefault());
             collator.setStrength(0);
             return collator.compare(appLabelInfo.getLabel(), appLabelInfo2.getLabel());
         }
     };
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.3
-        @Override // java.util.Comparator
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING = new Comparator<AppPickerView.AppLabelInfo>() {
+        @Override
         public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
             Collator collator = Collator.getInstance(Locale.getDefault());
             collator.setStrength(2);
             return collator.compare(appLabelInfo2.getLabel(), appLabelInfo.getLabel());
         }
     };
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING_IGNORE_CASE = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.4
-        @Override // java.util.Comparator
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING_IGNORE_CASE = new Comparator<AppPickerView.AppLabelInfo>() {
+        @Override
         public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
             Collator collator = Collator.getInstance(Locale.getDefault());
             collator.setStrength(0);
@@ -114,7 +115,6 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return gridAdapter;
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public void refreshSectionMap() {
         this.mSectionMap.clear();
         ArrayList arrayList = new ArrayList();
@@ -181,10 +181,10 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return this.mDataSet;
     }
 
-    @Override // android.widget.Filterable
+    @Override
     public Filter getFilter() {
-        return new Filter() { // from class: androidx.apppickerview.widget.AbsAdapter.5
-            @Override // android.widget.Filter
+        return new Filter() {
+            @Override
             public Filter.FilterResults performFiltering(CharSequence charSequence) {
                 String charSequence2 = charSequence.toString();
                 Filter.FilterResults filterResults = new Filter.FilterResults();
@@ -220,7 +220,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 return filterResults;
             }
 
-            @Override // android.widget.Filter
+            @Override
             public void publishResults(CharSequence charSequence, Filter.FilterResults filterResults) {
                 if ("".equals(AbsAdapter.this.mSearchText)) {
                     AbsAdapter.this.mHideAllApps = false;
@@ -238,17 +238,17 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         };
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemCount() {
         return this.mDataSetFiltered.size();
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public long getItemId(int i) {
         return this.mDataSetFiltered.get(i).hashCode();
     }
 
-    @Override // android.widget.SectionIndexer
+    @Override
     public int getPositionForSection(int i) {
         String[] strArr = this.mSections;
         if (i >= strArr.length) {
@@ -257,7 +257,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return this.mSectionMap.get(strArr[i]).intValue();
     }
 
-    @Override // android.widget.SectionIndexer
+    @Override
     public int getSectionForPosition(int i) {
         int[] iArr = this.mPositionToSectionIndex;
         if (i >= iArr.length) {
@@ -266,7 +266,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return iArr[i];
     }
 
-    @Override // android.widget.SectionIndexer
+    @Override
     public Object[] getSections() {
         return this.mSections;
     }
@@ -297,7 +297,7 @@ public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return i > 0 ? (textSize / f) * 1.3f : textSize;
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
         boolean z;
         String packageName = this.mDataSetFiltered.get(i).getPackageName();
