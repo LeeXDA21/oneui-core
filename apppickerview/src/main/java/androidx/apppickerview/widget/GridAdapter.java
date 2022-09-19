@@ -1,73 +1,46 @@
-/*
- * Copyright 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package androidx.apppickerview.widget;
-
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 import androidx.annotation.RestrictTo;
 import androidx.apppickerview.R;
+import androidx.apppickerview.widget.AppPickerView;
 import androidx.recyclerview.widget.RecyclerView;
 
-/*
- * Original code by Samsung, all rights reserved to the original author.
- */
-
-@RestrictTo(LIBRARY_GROUP_PREFIX)
-class GridAdapter extends AbsAdapter {
+@RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
+public class GridAdapter extends AbsAdapter {
     private static final int TYPE_HEADER = 256;
     private static final int TYPE_ITEM = 257;
     private static final int TYPE_SEPARATOR = 259;
 
-    public GridAdapter(Context context, int type, int order,
-                       AppPickerIconLoader iconLoader) {
-        super(context, type, order, iconLoader);
+    public GridAdapter(Context context, int i, int i2, AppPickerIconLoader appPickerIconLoader) {
+        super(context, i, i2, appPickerIconLoader);
     }
 
-    @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        if (viewType == TYPE_SEPARATOR) {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            View itemView = inflater.inflate(R.layout.app_picker_list_separator, parent, false);
-            return new AppPickerView.SeparatorViewHolder(itemView);
-        } else {
-            LayoutInflater inflater = LayoutInflater.from(mContext);
-            View itemView = inflater.inflate(R.layout.app_picker_grid, parent, false);
-            if (mType == AppPickerView.TYPE_GRID) {
-                itemView.findViewById(R.id.check_widget).setVisibility(View.GONE);
-            }
-            limitFontLarge2LinesHeight(itemView.findViewById(R.id.title));
-            return new AppPickerView.ViewHolder(itemView);
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    public int getItemViewType(int i) {
+        return getAppInfo(i).isSeparator() ? TYPE_SEPARATOR : getAppInfo(i).isCustomViewItem() ? -10 : 257;
+    }
+
+    @Override // androidx.apppickerview.widget.AbsAdapter
+    public void onBindViewHolderAction(AppPickerView.ViewHolder viewHolder, int i, String str) {
+    }
+
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    /* renamed from: onCreateViewHolder */
+    public RecyclerView.ViewHolder mo209onCreateViewHolder(ViewGroup viewGroup, int i) {
+        if (i == TYPE_SEPARATOR) {
+            return new AppPickerView.SeparatorViewHolder(LayoutInflater.from(this.mContext).inflate(R.layout.app_picker_list_separator, viewGroup, false));
         }
-    }
-
-    @Override
-    void onBindViewHolderAction(AppPickerView.ViewHolder holder, int position, String packageName) {
-    }
-
-    @Override
-    public int getItemViewType(int position) {
-        if (getAppInfo(position).isSeparator()) {
-            return TYPE_SEPARATOR;
+        View inflate = LayoutInflater.from(this.mContext).inflate(R.layout.app_picker_grid, viewGroup, false);
+        if (this.mType == 7) {
+            inflate.findViewById(R.id.check_widget).setVisibility(8);
         }
-        return TYPE_ITEM;
+        limitFontLarge2LinesHeight((TextView) inflate.findViewById(R.id.title));
+        return new AppPickerView.ViewHolder(inflate);
     }
 }

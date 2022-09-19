@@ -1,22 +1,4 @@
-/*
- * Copyright 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package androidx.apppickerview.widget;
-
-import static androidx.annotation.RestrictTo.Scope.LIBRARY_GROUP_PREFIX;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -32,13 +14,12 @@ import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 import androidx.apppickerview.R;
+import androidx.apppickerview.widget.AppPickerView;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.reflect.text.SeslTextUtilsReflector;
-
 import java.text.Collator;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -48,424 +29,361 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-/*
- * Original code by Samsung, all rights reserved to the original author.
- */
-
-@RestrictTo(LIBRARY_GROUP_PREFIX)
-public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
-        implements Filterable, SectionIndexer {
+@RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
+/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
+public abstract class AbsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable, SectionIndexer {
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.1
+        @Override // java.util.Comparator
+        public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
+            Collator collator = Collator.getInstance(Locale.getDefault());
+            collator.setStrength(2);
+            return collator.compare(appLabelInfo.getLabel(), appLabelInfo2.getLabel());
+        }
+    };
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING_IGNORE_CASE = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.2
+        @Override // java.util.Comparator
+        public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
+            Collator collator = Collator.getInstance(Locale.getDefault());
+            collator.setStrength(0);
+            return collator.compare(appLabelInfo.getLabel(), appLabelInfo2.getLabel());
+        }
+    };
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.3
+        @Override // java.util.Comparator
+        public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
+            Collator collator = Collator.getInstance(Locale.getDefault());
+            collator.setStrength(2);
+            return collator.compare(appLabelInfo2.getLabel(), appLabelInfo.getLabel());
+        }
+    };
+    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING_IGNORE_CASE = new Comparator<AppPickerView.AppLabelInfo>() { // from class: androidx.apppickerview.widget.AbsAdapter.4
+        @Override // java.util.Comparator
+        public int compare(AppPickerView.AppLabelInfo appLabelInfo, AppPickerView.AppLabelInfo appLabelInfo2) {
+            Collator collator = Collator.getInstance(Locale.getDefault());
+            collator.setStrength(0);
+            return collator.compare(appLabelInfo2.getLabel(), appLabelInfo.getLabel());
+        }
+    };
     private static final String TAG = "AppPickerViewAdapter";
-
-    private final int MAX_OFFSET = 200;
-
     private AppPickerIconLoader mAppPickerIconLoader;
-    protected Context mContext;
+    public Context mContext;
+    private int mForegroundColor;
     private AppPickerView.OnBindListener mOnBindListener;
     private AppPickerView.OnSearchFilterListener mOnSearchFilterListener;
-    private List<AppPickerView.AppLabelInfo> mDataSet = new ArrayList<>();
-    private List<AppPickerView.AppLabelInfo> mDataSetFiltered = new ArrayList<>();
-    private Map<String, Integer> mSectionMap = new HashMap<>();
-    private String[] mSections = new String[0];
-    private String mSearchText = "";
-
-    private boolean mHideAllApps = false;
-
-    private int mForegroundColor;
     private int mOrder;
     private int[] mPositionToSectionIndex;
-    protected int mType;
+    public int mType;
+    private final int MAX_OFFSET = 200;
+    private List<AppPickerView.AppLabelInfo> mDataSet = new ArrayList();
+    private List<AppPickerView.AppLabelInfo> mDataSetFiltered = new ArrayList();
+    private Map<String, Integer> mSectionMap = new HashMap();
+    private String[] mSections = new String[0];
+    private boolean mHideAllApps = false;
+    private String mSearchText = "";
 
-    public AbsAdapter(Context context, int type, int order,
-                      AppPickerIconLoader iconLoader) {
-        mContext = context;
-        mType = type;
-        mOrder = order;
-        mAppPickerIconLoader = iconLoader;
-
-        TypedValue outValue = new TypedValue();
-        mContext.getTheme().resolveAttribute(R.attr.colorPrimary, outValue, true);
-        mForegroundColor = outValue.resourceId != 0 ?
-                mContext.getResources().getColor(outValue.resourceId) : outValue.data;
+    public AbsAdapter(Context context, int i, int i2, AppPickerIconLoader appPickerIconLoader) {
+        this.mContext = context;
+        this.mType = i;
+        this.mOrder = i2;
+        this.mAppPickerIconLoader = appPickerIconLoader;
+        TypedValue typedValue = new TypedValue();
+        this.mContext.getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
+        this.mForegroundColor = typedValue.resourceId != 0 ? this.mContext.getResources().getColor(typedValue.resourceId) : typedValue.data;
     }
 
-    static AbsAdapter getAppPickerAdapter(Context context, List<String> packageNamesList, int type,
-                                          int order, List<AppPickerView.AppLabelInfo> labelInfoList,
-                                          AppPickerIconLoader iconLoader,
-                                          List<ComponentName> activityNamesList) {
-        final AbsAdapter adapter;
-        if (type >= AppPickerView.TYPE_GRID) {
-            adapter = new GridAdapter(context, type, order, iconLoader);
-        } else {
-            adapter = new ListAdapter(context, type, order, iconLoader);
-        }
-        adapter.setHasStableIds(true);
-        adapter.resetPackages(packageNamesList, false, labelInfoList, activityNamesList);
-        return adapter;
-    }
-
-    List<AppPickerView.AppLabelInfo> getDataSet() {
-        return mDataSet;
-    }
-
-    void resetPackages(List<String> packageNamesList, boolean dataSetchanged,
-                       List<AppPickerView.AppLabelInfo> labelInfoList,
-                       List<ComponentName> activityNamesList) {
-        Log.i(TAG, "Start resetpackage dataSetchanged : " + dataSetchanged);
-
-        mDataSet.clear();
-        mDataSet.addAll(DataManager.resetPackages(mContext, packageNamesList, labelInfoList, activityNamesList));
-
-        if (Build.VERSION.SDK_INT >= 24) {
-            if (getAppLabelComparator(mOrder) != null) {
-                mDataSet.sort(getAppLabelComparator(mOrder));
-            }
-        }
-
-        if (hasAllAppsInList()) {
-            if (mDataSet != null && mDataSet.size() > 0) {
-                mDataSet.add(0,
-                        new AppPickerView.AppLabelInfo(AppPickerView.ALL_APPS_STRING,
-                                "", ""));
-            }
-        }
-        mDataSetFiltered.clear();
-        mDataSetFiltered.addAll(mDataSet);
-
-        refreshSectionMap();
-
-        if (dataSetchanged) {
-            notifyDataSetChanged();
-        }
-
-        Log.i(TAG, "End resetpackage");
-    }
-
-    void addPackage(int position, String label) {
-        mDataSet.add(position,
-                new AppPickerView.AppLabelInfo("", label, ""));
-        mDataSetFiltered.clear();
-        mDataSetFiltered.addAll(mDataSet);
-
-        refreshSectionMap();
-        notifyItemInserted(position);
-    }
-
-    void addSeparator(int position) {
-        mDataSet.add(position,
-                new AppPickerView.AppLabelInfo(AppPickerView.KEY_APP_SEPARATOR,
-                        "", "").setSeparator(true));
-        mDataSetFiltered.clear();
-        mDataSetFiltered.addAll(mDataSet);
-
-        refreshSectionMap();
-        notifyItemInserted(position);
-    }
-
-    public void setOrder(int order) {
-        mOrder = order;
-        if (Build.VERSION.SDK_INT >= 24) {
-            if (getAppLabelComparator(order) != null) {
-                mDataSet.sort(getAppLabelComparator(order));
-                mDataSetFiltered.sort(getAppLabelComparator(order));
-            }
-        }
-
-        refreshSectionMap();
-        notifyDataSetChanged();
-    }
-
-    private Comparator<AppPickerView.AppLabelInfo> getAppLabelComparator(int order) {
-        switch (order) {
-            case AppPickerView.ORDER_ASCENDING:
-                return APP_LABEL_ASCENDING;
-            case AppPickerView.ORDER_ASCENDING_IGNORE_CASE:
+    private Comparator<AppPickerView.AppLabelInfo> getAppLabelComparator(int i) {
+        if (i != 1) {
+            if (i == 2) {
                 return APP_LABEL_ASCENDING_IGNORE_CASE;
-            case AppPickerView.ORDER_DESCENDING:
+            }
+            if (i == 3) {
                 return APP_LABEL_DESCENDING;
-            case AppPickerView.ORDER_DESCENDING_IGNORE_CASE:
+            }
+            if (i == 4) {
                 return APP_LABEL_DESCENDING_IGNORE_CASE;
+            }
+            return null;
         }
-        return null;
+        return APP_LABEL_ASCENDING;
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        final String packageName = mDataSetFiltered.get(position).getPackageName();
-        final String activityName = mDataSetFiltered.get(position).getActivityName();
+    public static AbsAdapter getAppPickerAdapter(Context context, List<String> list, int i, int i2, List<AppPickerView.AppLabelInfo> list2, AppPickerIconLoader appPickerIconLoader, List<ComponentName> list3) {
+        AbsAdapter gridAdapter = i >= 7 ? new GridAdapter(context, i, i2, appPickerIconLoader) : new ListAdapter(context, i, i2, appPickerIconLoader);
+        gridAdapter.setHasStableIds(true);
+        gridAdapter.resetPackages(list, false, list2, list3);
+        return gridAdapter;
+    }
 
-        AppPickerView.ViewHolder vh = (AppPickerView.ViewHolder) holder;
-        if (!(holder instanceof AppPickerView.HeaderViewHolder)
-                && !(holder instanceof AppPickerView.SeparatorViewHolder)) {
-            if (mAppPickerIconLoader != null) {
-                mAppPickerIconLoader.loadIcon(packageName, activityName, vh.getAppIcon());
+    /* JADX INFO: Access modifiers changed from: private */
+    public void refreshSectionMap() {
+        this.mSectionMap.clear();
+        ArrayList arrayList = new ArrayList();
+        if (Build.VERSION.SDK_INT >= 24) {
+            LocaleList locales = this.mContext.getResources().getConfiguration().getLocales();
+            if (locales.size() == 0) {
+                locales = new LocaleList(Locale.ENGLISH);
             }
-
-            final String label = mDataSetFiltered.get(position).getLabel();
-            if (mSearchText.length() > 0) {
-                // TODO rework this method
-                // kang
-                SpannableString spannableString = new SpannableString(label);
-                StringTokenizer stringTokenizer = new StringTokenizer(mSearchText);
-
-                while (stringTokenizer.hasMoreTokens()) {
-                    String nextToken = stringTokenizer.nextToken();
-                    int i3 = 0;
-                    String str = label;
-                    do {
-                        char[] semGetPrefixCharForSpan
-                                = SeslTextUtilsReflector
-                                .semGetPrefixCharForSpan(vh.getAppLabel().getPaint(),
-                                        str, nextToken.toCharArray());
-                        if (semGetPrefixCharForSpan != null) {
-                            nextToken = new String(semGetPrefixCharForSpan);
-                        }
-
-                        int i2;
-                        String lowerCase = str.toLowerCase();
-                        if (str.length() == lowerCase.length()) {
-                            i2 = lowerCase.indexOf(nextToken.toLowerCase());
-                        } else {
-                            i2 = str.indexOf(nextToken);
-                        }
-
-                        int length = nextToken.length() + i2;
-                        if (i2 < 0) {
-                            break;
-                        }
-
-                        int i4 = i2 + i3;
-                        i3 += length;
-                        spannableString.setSpan(
-                                new ForegroundColorSpan(this.mForegroundColor), i4, i3, 17);
-                        str = str.substring(length);
-                        if (str.toLowerCase().indexOf(nextToken.toLowerCase()) != -1) {
-                            break;
-                        }
-                    } while (i3 < MAX_OFFSET);
+            AlphabeticIndex alphabeticIndex = new AlphabeticIndex(locales.get(0));
+            int size = locales.size();
+            for (int i = 1; i < size; i++) {
+                alphabeticIndex.addLabels(locales.get(i));
+            }
+            alphabeticIndex.addLabels(Locale.ENGLISH);
+            AlphabeticIndex.ImmutableIndex buildImmutableIndex = alphabeticIndex.buildImmutableIndex();
+            this.mPositionToSectionIndex = new int[this.mDataSetFiltered.size()];
+            for (int i2 = 0; i2 < this.mDataSetFiltered.size(); i2++) {
+                String label = this.mDataSetFiltered.get(i2).getLabel();
+                if (TextUtils.isEmpty(label)) {
+                    label = "";
                 }
-                // kang
-                vh.getAppLabel().setText(spannableString);
-                vh.getItem().setContentDescription(spannableString);
-            } else {
-                vh.getAppLabel().setText(label);
-                vh.getItem().setContentDescription(label);
+                String label2 = buildImmutableIndex.getBucket(buildImmutableIndex.getBucketIndex(label)).getLabel();
+                if (!this.mSectionMap.containsKey(label2)) {
+                    arrayList.add(label2);
+                    this.mSectionMap.put(label2, Integer.valueOf(i2));
+                }
+                this.mPositionToSectionIndex[i2] = arrayList.size() - 1;
             }
-        }
-
-        onBindViewHolderAction(vh, position, packageName);
-
-        if (mOnBindListener != null) {
-            mOnBindListener.onBindViewHolder(vh, position, packageName);
+            String[] strArr = new String[arrayList.size()];
+            this.mSections = strArr;
+            arrayList.toArray(strArr);
         }
     }
 
-    abstract void onBindViewHolderAction(AppPickerView.ViewHolder holder, int position,
-                                         String packageName);
-
-    @Override
-    public int getItemCount() {
-        return mDataSetFiltered.size();
+    public void addCustomViewItem(int i, int i2) {
+        this.mDataSet.add(i, new AppPickerView.AppLabelInfo(AppPickerView.KEY_CUSTOM_VIEW_ITEM, "", "").setCustomViewItem(true, i2));
+        this.mDataSetFiltered.clear();
+        this.mDataSetFiltered.addAll(this.mDataSet);
+        refreshSectionMap();
+        notifyItemInserted(i);
     }
 
-    public AppPickerView.AppLabelInfo getAppInfo(int position) {
-        return mDataSetFiltered.get(position);
+    public void addPackage(int i, String str) {
+        this.mDataSet.add(i, new AppPickerView.AppLabelInfo("", str, ""));
+        this.mDataSetFiltered.clear();
+        this.mDataSetFiltered.addAll(this.mDataSet);
+        refreshSectionMap();
+        notifyItemInserted(i);
     }
 
-    public void setOnBindListener(@NonNull AppPickerView.OnBindListener listener) {
-        mOnBindListener = listener;
+    public void addSeparator(int i) {
+        this.mDataSet.add(i, new AppPickerView.AppLabelInfo(AppPickerView.KEY_APP_SEPARATOR, "", "").setSeparator(true));
+        this.mDataSetFiltered.clear();
+        this.mDataSetFiltered.addAll(this.mDataSet);
+        refreshSectionMap();
+        notifyItemInserted(i);
     }
 
-    public void setOnSearchFilterListener(AppPickerView.OnSearchFilterListener listener) {
-        mOnSearchFilterListener = listener;
+    public AppPickerView.AppLabelInfo getAppInfo(int i) {
+        return this.mDataSetFiltered.get(i);
     }
 
-    protected boolean hasAllAppsInList() {
-        return (mType == AppPickerView.TYPE_LIST_CHECKBOX_WITH_ALL_APPS
-                    || mType == AppPickerView.TYPE_LIST_SWITCH_WITH_ALL_APPS)
-                && !mHideAllApps;
+    public List<AppPickerView.AppLabelInfo> getDataSet() {
+        return this.mDataSet;
     }
 
-    @Override
-    public long getItemId(int position) {
-        return mDataSetFiltered.get(position).hashCode();
-    }
-
-    @Override
+    @Override // android.widget.Filterable
     public Filter getFilter() {
-        return new Filter() {
-            @Override
-            protected FilterResults performFiltering(CharSequence constraint) {
-                final String searchText = constraint.toString();
-                Filter.FilterResults results = new Filter.FilterResults();
-
-                if (searchText.isEmpty()) {
-                    mSearchText = "";
-                    results.values = mDataSet;
+        return new Filter() { // from class: androidx.apppickerview.widget.AbsAdapter.5
+            @Override // android.widget.Filter
+            public Filter.FilterResults performFiltering(CharSequence charSequence) {
+                String charSequence2 = charSequence.toString();
+                Filter.FilterResults filterResults = new Filter.FilterResults();
+                if (charSequence2.isEmpty()) {
+                    AbsAdapter.this.mSearchText = "";
+                    filterResults.values = AbsAdapter.this.mDataSet;
                 } else {
-                    mSearchText = searchText;
-
-                    ArrayList dataSetFiltered = new ArrayList();
-                    for (AppPickerView.AppLabelInfo labelInfo : mDataSet) {
-                        if (!AppPickerView.ALL_APPS_STRING.equals(labelInfo.getPackageName())) {
-                            final String label = labelInfo.getLabel();
+                    AbsAdapter.this.mSearchText = charSequence2;
+                    ArrayList arrayList = new ArrayList();
+                    for (AppPickerView.AppLabelInfo appLabelInfo : AbsAdapter.this.mDataSet) {
+                        if (!AppPickerView.ALL_APPS_STRING.equals(appLabelInfo.getPackageName())) {
+                            String label = appLabelInfo.getLabel();
                             if (!TextUtils.isEmpty(label)) {
-                                StringTokenizer tokenizer = new StringTokenizer(searchText.toLowerCase());
-                                boolean showItem = true;
+                                StringTokenizer stringTokenizer = new StringTokenizer(charSequence2.toLowerCase());
+                                boolean z = true;
                                 String lowerCase = label.toLowerCase();
-
-                                while (tokenizer.hasMoreTokens()) {
-                                    if (!lowerCase.contains(tokenizer.nextToken())) {
-                                        showItem = false;
+                                while (true) {
+                                    if (!stringTokenizer.hasMoreTokens()) {
+                                        break;
+                                    } else if (!lowerCase.contains(stringTokenizer.nextToken())) {
+                                        z = false;
                                         break;
                                     }
                                 }
-
-                                if (showItem) {
-                                    dataSetFiltered.add(labelInfo);
+                                if (z) {
+                                    arrayList.add(appLabelInfo);
                                 }
                             }
                         }
                     }
-
-                    results.values = dataSetFiltered;
+                    filterResults.values = arrayList;
                 }
-                return results;
+                return filterResults;
             }
 
-            @Override
-            protected void publishResults(CharSequence constraint, FilterResults results) {
-                if ("".equals(mSearchText)) {
-                    mHideAllApps = false;
+            @Override // android.widget.Filter
+            public void publishResults(CharSequence charSequence, Filter.FilterResults filterResults) {
+                if ("".equals(AbsAdapter.this.mSearchText)) {
+                    AbsAdapter.this.mHideAllApps = false;
                 } else {
-                    mHideAllApps = true;
+                    AbsAdapter.this.mHideAllApps = true;
                 }
-                mDataSetFiltered.clear();
-                mDataSetFiltered.addAll((ArrayList) results.values);
-
-                refreshSectionMap();
-                notifyDataSetChanged();
-
-                if (mOnSearchFilterListener != null) {
-                    mOnSearchFilterListener.onSearchFilterCompleted(getItemCount());
+                AbsAdapter.this.mDataSetFiltered.clear();
+                AbsAdapter.this.mDataSetFiltered.addAll((ArrayList) filterResults.values);
+                AbsAdapter.this.refreshSectionMap();
+                AbsAdapter.this.notifyDataSetChanged();
+                if (AbsAdapter.this.mOnSearchFilterListener != null) {
+                    AbsAdapter.this.mOnSearchFilterListener.onSearchFilterCompleted(AbsAdapter.this.getItemCount());
                 }
             }
         };
     }
 
-    @Override
-    public int getPositionForSection(int sectionIndex) {
-        if (sectionIndex >= mSections.length) {
-            return 0;
-        }
-        return mSectionMap.get(mSections[sectionIndex]);
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    public int getItemCount() {
+        return this.mDataSetFiltered.size();
     }
 
-    @Override
-    public int getSectionForPosition(int position) {
-        if (position >= mPositionToSectionIndex.length) {
-            return 0;
-        }
-        return mPositionToSectionIndex[position];
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    public long getItemId(int i) {
+        return this.mDataSetFiltered.get(i).hashCode();
     }
 
-    @Override
+    @Override // android.widget.SectionIndexer
+    public int getPositionForSection(int i) {
+        String[] strArr = this.mSections;
+        if (i >= strArr.length) {
+            return 0;
+        }
+        return this.mSectionMap.get(strArr[i]).intValue();
+    }
+
+    @Override // android.widget.SectionIndexer
+    public int getSectionForPosition(int i) {
+        int[] iArr = this.mPositionToSectionIndex;
+        if (i >= iArr.length) {
+            return 0;
+        }
+        return iArr[i];
+    }
+
+    @Override // android.widget.SectionIndexer
     public Object[] getSections() {
-        return mSections;
+        return this.mSections;
     }
 
-    private void refreshSectionMap() {
-        mSectionMap.clear();
-        ArrayList sections = new ArrayList();
-        if (Build.VERSION.SDK_INT >= 24) {
-            LocaleList locales = mContext.getResources().getConfiguration().getLocales();
-            if (locales.size() == 0) {
-                locales = new LocaleList(Locale.ENGLISH);
-            }
-
-            AlphabeticIndex alphabeticIndex = new AlphabeticIndex(locales.get(0));
-            for (int i = 1; i < locales.size(); i++) {
-                alphabeticIndex.addLabels(locales.get(i));
-            }
-            alphabeticIndex.addLabels(Locale.ENGLISH);
-
-            AlphabeticIndex.ImmutableIndex immutableIndex = alphabeticIndex.buildImmutableIndex();
-
-            mPositionToSectionIndex = new int[mDataSetFiltered.size()];
-
-            for (int i = 0; i < mDataSetFiltered.size(); i++) {
-                String label = mDataSetFiltered.get(i).getLabel();
-                if (TextUtils.isEmpty(label)) {
-                    label = "";
-                }
-                label = immutableIndex.getBucket(immutableIndex.getBucketIndex(label)).getLabel();
-                if (!mSectionMap.containsKey(label)) {
-                    sections.add(label);
-                    mSectionMap.put(label, i);
-                }
-                mPositionToSectionIndex[i] = sections.size() - 1;
-            }
-
-            mSections = new String[sections.size()];
-            sections.toArray(mSections);
-        }
+    public boolean hasAllAppsInList() {
+        int i = this.mType;
+        return (i == 3 || i == 6) && !this.mHideAllApps;
     }
 
-    protected float limitFontScale(@NonNull TextView textView) {
-        final float currentFontScale
-                = textView.getResources().getConfiguration().fontScale;
-        int i = (currentFontScale > 1.3f ? 1 : (currentFontScale == 1.3f ? 0 : -1));
-        final float textSize = textView.getTextSize();
-        return i > 0 ? (textSize / currentFontScale) * 1.3f : textSize;
-    }
-
-    protected void limitFontLarge(TextView textView) {
+    public void limitFontLarge(TextView textView) {
         if (textView != null) {
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, limitFontScale(textView));
+            textView.setTextSize(0, limitFontScale(textView));
         }
     }
 
-    protected void limitFontLarge2LinesHeight(TextView textView) {
+    public void limitFontLarge2LinesHeight(TextView textView) {
         if (textView != null) {
             float limitFontScale = limitFontScale(textView);
-            textView.setTextSize(TypedValue.COMPLEX_UNIT_PX, limitFontScale);
+            textView.setTextSize(0, limitFontScale);
             textView.setMinHeight(Math.round((limitFontScale * 2.0f) + 0.5f));
         }
     }
 
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING
-            = new Comparator<AppPickerView.AppLabelInfo>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.TERTIARY);
-            return collator.compare(a.getLabel(), b.getLabel());
-        }
-    };
+    public float limitFontScale(@NonNull TextView textView) {
+        float f = textView.getResources().getConfiguration().fontScale;
+        int i = (f > 1.3f ? 1 : (f == 1.3f ? 0 : -1));
+        float textSize = textView.getTextSize();
+        return i > 0 ? (textSize / f) * 1.3f : textSize;
+    }
 
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_ASCENDING_IGNORE_CASE
-            = new Comparator<AppPickerView.AppLabelInfo>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.PRIMARY);
-            return collator.compare(a.getLabel(), b.getLabel());
+    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        boolean z;
+        String packageName = this.mDataSetFiltered.get(i).getPackageName();
+        String activityName = this.mDataSetFiltered.get(i).getActivityName();
+        AppPickerView.ViewHolder viewHolder2 = (AppPickerView.ViewHolder) viewHolder;
+        if (!(viewHolder instanceof AppPickerView.HeaderViewHolder) && !(viewHolder instanceof AppPickerView.SeparatorViewHolder) && !((z = viewHolder instanceof AppPickerView.CustomViewItemViewHolder))) {
+            AppPickerIconLoader appPickerIconLoader = this.mAppPickerIconLoader;
+            if (appPickerIconLoader != null) {
+                appPickerIconLoader.loadIcon(packageName, activityName, viewHolder2.getAppIcon());
+            }
+            String label = this.mDataSetFiltered.get(i).getLabel();
+            if (this.mSearchText.length() > 0) {
+                SpannableString spannableString = new SpannableString(label);
+                StringTokenizer stringTokenizer = new StringTokenizer(this.mSearchText);
+                while (stringTokenizer.hasMoreTokens()) {
+                    String nextToken = stringTokenizer.nextToken();
+                    int i2 = 0;
+                    String str = label;
+                    do {
+                        char[] semGetPrefixCharForSpan = SeslTextUtilsReflector.semGetPrefixCharForSpan(viewHolder2.getAppLabel().getPaint(), str, nextToken.toCharArray());
+                        if (semGetPrefixCharForSpan != null) {
+                            nextToken = new String(semGetPrefixCharForSpan);
+                        }
+                        String lowerCase = str.toLowerCase();
+                        int indexOf = str.length() == lowerCase.length() ? lowerCase.indexOf(nextToken.toLowerCase()) : str.indexOf(nextToken);
+                        int length = nextToken.length() + indexOf;
+                        if (indexOf < 0) {
+                            break;
+                        }
+                        int i3 = indexOf + i2;
+                        i2 += length;
+                        spannableString.setSpan(new ForegroundColorSpan(this.mForegroundColor), i3, i2, 17);
+                        str = str.substring(length);
+                        if (str.toLowerCase().indexOf(nextToken.toLowerCase()) != -1) {
+                        }
+                    } while (i2 < 200);
+                }
+                viewHolder2.getAppLabel().setText(spannableString);
+            } else if (!z) {
+                viewHolder2.getAppLabel().setText(label);
+            }
         }
-    };
+        onBindViewHolderAction(viewHolder2, i, packageName);
+        AppPickerView.OnBindListener onBindListener = this.mOnBindListener;
+        if (onBindListener != null) {
+            onBindListener.onBindViewHolder(viewHolder2, i, packageName);
+        }
+    }
 
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING
-            = new Comparator<AppPickerView.AppLabelInfo>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.TERTIARY);
-            return collator.compare(b.getLabel(), a.getLabel());
-        }
-    };
+    public abstract void onBindViewHolderAction(AppPickerView.ViewHolder viewHolder, int i, String str);
 
-    private static Comparator<AppPickerView.AppLabelInfo> APP_LABEL_DESCENDING_IGNORE_CASE
-            = new Comparator<AppPickerView.AppLabelInfo>() {
-        public int compare(AppPickerView.AppLabelInfo a, AppPickerView.AppLabelInfo b) {
-            Collator collator = Collator.getInstance(Locale.getDefault());
-            collator.setStrength(Collator.PRIMARY);
-            return collator.compare(b.getLabel(), a.getLabel());
+    public void resetPackages(List<String> list, boolean z, List<AppPickerView.AppLabelInfo> list2, List<ComponentName> list3) {
+        List<AppPickerView.AppLabelInfo> list4;
+        Log.i(TAG, "Start resetpackage dataSetchanged : " + z);
+        this.mDataSet.clear();
+        this.mDataSet.addAll(DataManager.resetPackages(this.mContext, list, list2, list3));
+        if (Build.VERSION.SDK_INT >= 24 && getAppLabelComparator(this.mOrder) != null) {
+            this.mDataSet.sort(getAppLabelComparator(this.mOrder));
         }
-    };
+        if (hasAllAppsInList() && (list4 = this.mDataSet) != null && list4.size() > 0) {
+            this.mDataSet.add(0, new AppPickerView.AppLabelInfo(AppPickerView.ALL_APPS_STRING, "", ""));
+        }
+        this.mDataSetFiltered.clear();
+        this.mDataSetFiltered.addAll(this.mDataSet);
+        refreshSectionMap();
+        if (z) {
+            notifyDataSetChanged();
+        }
+        Log.i(TAG, "End resetpackage");
+    }
+
+    public void setOnBindListener(@NonNull AppPickerView.OnBindListener onBindListener) {
+        this.mOnBindListener = onBindListener;
+    }
+
+    public void setOnSearchFilterListener(AppPickerView.OnSearchFilterListener onSearchFilterListener) {
+        this.mOnSearchFilterListener = onSearchFilterListener;
+    }
+
+    public void setOrder(int i) {
+        this.mOrder = i;
+        if (Build.VERSION.SDK_INT >= 24 && getAppLabelComparator(i) != null) {
+            this.mDataSet.sort(getAppLabelComparator(i));
+            this.mDataSetFiltered.sort(getAppLabelComparator(i));
+        }
+        refreshSectionMap();
+        notifyDataSetChanged();
+    }
 }

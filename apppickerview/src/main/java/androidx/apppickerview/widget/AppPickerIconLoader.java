@@ -1,19 +1,3 @@
-/*
- * Copyright 2022 The Android Open Source Project
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
 package androidx.apppickerview.widget;
 
 import android.content.ComponentName;
@@ -23,105 +7,95 @@ import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.TextUtils;
 import android.widget.ImageView;
-
 import androidx.reflect.app.SeslApplicationPackageManagerReflector;
 
-/*
- * Original code by Samsung, all rights reserved to the original author.
- */
-
+/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
 public class AppPickerIconLoader {
     private static final String THREAD_NAME = "AppPickerIconLoader";
     private Context mContext;
-    private PackageManager mPackageManager;
     private LoadIconTask mLoadIconTask;
+    private PackageManager mPackageManager;
+
+    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
+    public static class IconInfo {
+        public String activityName;
+        public Drawable drawable = null;
+        public ImageView imageView;
+        public String packageName;
+
+        public IconInfo(String str, String str2, ImageView imageView) {
+            this.packageName = str;
+            this.imageView = imageView;
+            this.activityName = str2;
+        }
+    }
+
+    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
+    public class LoadIconTask extends AsyncTask<Void, Void, Drawable> {
+        private final IconInfo mIconInfo;
+
+        public LoadIconTask(IconInfo iconInfo) {
+            this.mIconInfo = iconInfo;
+        }
+
+        @Override // android.os.AsyncTask
+        public Drawable doInBackground(Void... voidArr) {
+            AppPickerIconLoader appPickerIconLoader = AppPickerIconLoader.this;
+            IconInfo iconInfo = this.mIconInfo;
+            return appPickerIconLoader.getAppIcon(iconInfo.packageName, iconInfo.activityName);
+        }
+
+        @Override // android.os.AsyncTask
+        public void onPostExecute(Drawable drawable) {
+            ImageView imageView;
+            IconInfo iconInfo = this.mIconInfo;
+            if (iconInfo == null || (imageView = iconInfo.imageView) == null || drawable == null) {
+                return;
+            }
+            imageView.setImageDrawable(drawable);
+        }
+    }
 
     public AppPickerIconLoader(Context context) {
-        mContext = context;
-        mPackageManager = context.getPackageManager();
+        this.mContext = context;
+        this.mPackageManager = context.getPackageManager();
     }
 
-    public void loadIcon(String packageName, String activityName,
-                         ImageView imageView) {
-        if (!TextUtils.isEmpty(packageName) && imageView != null) {
-            imageView.setTag(packageName);
-
-            IconInfo iconInfo = new IconInfo(packageName, activityName, imageView);
-            new LoadIconTask(iconInfo)
-                    .executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+    /* JADX INFO: Access modifiers changed from: private */
+    public Drawable getAppIcon(String str, String str2) {
+        if (str2 == null || str2.equals("")) {
+            Drawable semGetApplicationIconForIconTray = SeslApplicationPackageManagerReflector.semGetApplicationIconForIconTray(this.mPackageManager, str, 1);
+            if (semGetApplicationIconForIconTray == null) {
+                try {
+                    return this.mPackageManager.getApplicationIcon(str);
+                } catch (PackageManager.NameNotFoundException unused) {
+                }
+            }
+            return semGetApplicationIconForIconTray;
+        }
+        ComponentName componentName = new ComponentName(str, str2);
+        Drawable semGetActivityIconForIconTray = SeslApplicationPackageManagerReflector.semGetActivityIconForIconTray(this.mPackageManager, componentName, 1);
+        if (semGetActivityIconForIconTray != null) {
+            return semGetActivityIconForIconTray;
+        }
+        try {
+            return this.mPackageManager.getActivityIcon(componentName);
+        } catch (PackageManager.NameNotFoundException unused2) {
+            return semGetActivityIconForIconTray;
         }
     }
 
-    private Drawable getAppIcon(String packageName, String activityName) {
-        if (activityName != null && !activityName.equals("")) {
-            ComponentName componentName
-                    = new ComponentName(packageName, activityName);
-
-            Drawable appIcon
-                    = SeslApplicationPackageManagerReflector
-                    .semGetActivityIconForIconTray(mPackageManager, componentName, 1);
-            if (appIcon != null) {
-                return appIcon;
-            }
-
-            try {
-                return mPackageManager.getActivityIcon(componentName);
-            } catch (PackageManager.NameNotFoundException e) {
-                return appIcon;
-            }
-        } else {
-            Drawable appIcon
-                    = SeslApplicationPackageManagerReflector
-                    .semGetApplicationIconForIconTray(mPackageManager, packageName, 1);
-            if (appIcon != null) {
-                return appIcon;
-            }
-
-            try {
-                return mPackageManager.getApplicationIcon(packageName);
-            } catch (PackageManager.NameNotFoundException e) {
-                return appIcon;
-            }
+    public void loadIcon(String str, String str2, ImageView imageView) {
+        if (TextUtils.isEmpty(str) || imageView == null) {
+            return;
         }
+        imageView.setTag(str);
+        new LoadIconTask(new IconInfo(str, str2, imageView)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR, new Void[0]);
     }
 
     public void startIconLoaderThread() {
     }
 
     public void stopIconLoaderThread() {
-    }
-
-    private static class IconInfo {
-        String activityName;
-        Drawable drawable = null;
-        ImageView imageView;
-        String packageName;
-
-        public IconInfo(String packageName, String activityName,
-                        ImageView imageView) {
-            this.packageName = packageName;
-            this.imageView = imageView;
-            this.activityName = activityName;
-        }
-    }
-
-    class LoadIconTask extends AsyncTask<Void, Void, Drawable> {
-        private final IconInfo mIconInfo;
-
-        LoadIconTask(IconInfo iconInfo) {
-            mIconInfo = iconInfo;
-        }
-
-        protected Drawable doInBackground(Void... params) {
-            return getAppIcon(mIconInfo.packageName, mIconInfo.activityName);
-        }
-
-        protected void onPostExecute(Drawable result) {
-            if (mIconInfo != null) {
-                if (mIconInfo.imageView != null && result != null) {
-                    mIconInfo.imageView.setImageDrawable(result);
-                }
-            }
-        }
     }
 }
