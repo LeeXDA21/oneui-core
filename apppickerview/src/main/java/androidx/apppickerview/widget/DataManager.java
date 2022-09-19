@@ -15,8 +15,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+// Credits to Samsung, all rights reserved to the original owners.
+
 @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
-/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
 public class DataManager {
     private static final Uri APP_LIST_PROVIDER_CONTENT_URI = Uri.parse("content://com.samsung.android.settings.applist");
     private static final String KEY_APP_LABEL = "app_title";
@@ -56,107 +57,6 @@ public class DataManager {
             Log.i(TAG, "can't find label for " + str);
             return "Unknown";
         }
-    }
-
-    /* JADX WARN: Code restructure failed: missing block: B:18:0x0094, code lost:
-        if (r1 != null) goto L23;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:24:0x009d, code lost:
-        if (r1 == null) goto L21;
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:25:0x009f, code lost:
-        r1.close();
-     */
-    /* JADX WARN: Code restructure failed: missing block: B:26:0x00a2, code lost:
-        return r0;
-     */
-    /*
-        Code decompiled incorrectly, please refer to instructions dump.
-        To view partially-correct code enable 'Show inconsistent code' option in preferences
-    */
-    private static java.util.HashMap<java.lang.String, java.lang.String> getLabelFromSCS(android.content.Context r6, boolean r7) {
-        /*
-            java.util.HashMap r0 = new java.util.HashMap
-            r0.<init>()
-            r1 = 0
-            boolean r2 = androidx.apppickerview.widget.DataManager.sIsSupportSCS     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            if (r2 == 0) goto Ld
-            java.lang.String r2 = "com.samsung.android.scs.ai.search/v1"
-            goto Lf
-        Ld:
-            java.lang.String r2 = "com.samsung.android.bixby.service.bixbysearch/v1"
-        Lf:
-            java.lang.String r3 = "*"
-            java.lang.StringBuilder r4 = new java.lang.StringBuilder     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            r4.<init>()     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r5 = "content://"
-            r4.append(r5)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            r4.append(r2)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r2 = r4.toString()     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            android.net.Uri r2 = android.net.Uri.parse(r2)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r4 = "application"
-            android.net.Uri r2 = android.net.Uri.withAppendedPath(r2, r4)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            android.os.Bundle r4 = new android.os.Bundle     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            r4.<init>()     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r5 = "android:query-arg-sql-selection"
-            r4.putString(r5, r3)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r3 = "query-arg-all-apps"
-            r5 = 1
-            r4.putBoolean(r3, r5)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r3 = "android:query-arg-limit"
-            r5 = 10000(0x2710, float:1.4013E-41)
-            r4.putInt(r3, r5)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            android.content.ContentResolver r6 = r6.getContentResolver()     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            android.database.Cursor r1 = r6.query(r2, r1, r4, r1)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            if (r1 == 0) goto L94
-        L4d:
-            boolean r6 = r1.moveToNext()     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            if (r6 == 0) goto L94
-            java.lang.String r6 = "label"
-            int r6 = r1.getColumnIndex(r6)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r6 = r1.getString(r6)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r2 = "packageName"
-            if (r7 == 0) goto L88
-            java.lang.StringBuilder r3 = new java.lang.StringBuilder     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            r3.<init>()     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r4 = "componentName"
-            int r4 = r1.getColumnIndex(r4)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r4 = r1.getString(r4)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            r3.append(r4)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r4 = "/"
-            r3.append(r4)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            int r2 = r1.getColumnIndex(r2)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r2 = r1.getString(r2)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            r3.append(r2)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r2 = r3.toString()     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            goto L90
-        L88:
-            int r2 = r1.getColumnIndex(r2)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            java.lang.String r2 = r1.getString(r2)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-        L90:
-            r0.put(r2, r6)     // Catch: java.lang.Throwable -> L97 java.lang.Exception -> L99
-            goto L4d
-        L94:
-            if (r1 == 0) goto La2
-            goto L9f
-        L97:
-            r6 = move-exception
-            goto La3
-        L99:
-            r6 = move-exception
-            r6.printStackTrace()     // Catch: java.lang.Throwable -> L97
-            if (r1 == 0) goto La2
-        L9f:
-            r1.close()
-        La2:
-            return r0
-        La3:
-            if (r1 == 0) goto La8
-            r1.close()
-        La8:
-            throw r6
-        */
-        throw new UnsupportedOperationException("Method not decompiled: androidx.apppickerview.widget.DataManager.getLabelFromSCS(android.content.Context, boolean):java.util.HashMap");
     }
 
     private static HashMap<String, String> loadLabelFromSettings(Context context) {
