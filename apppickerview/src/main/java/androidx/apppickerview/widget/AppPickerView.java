@@ -34,7 +34,8 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
-/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
+// Credits to Samsung, all rights reserved to the original owners.
+
 public class AppPickerView extends RecyclerView implements RecyclerView.RecyclerListener {
     public static final String ALL_APPS_STRING = "all_apps";
     public static final int CUSTOM_VIEW_ITEM = -10;
@@ -67,7 +68,6 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
     private int mSpanCount;
     private int mType;
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public static class AppLabelInfo {
         private String mActivityName;
         private String mLabel;
@@ -136,31 +136,26 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
 
     @Retention(RetentionPolicy.SOURCE)
     @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP})
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public @interface AppPickerOrder {
     }
 
     @Retention(RetentionPolicy.SOURCE)
     @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP})
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public @interface AppPickerType {
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public static class CustomViewItemViewHolder extends ViewHolder {
         public CustomViewItemViewHolder(View view) {
             super(view);
         }
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public static class FooterViewHolder extends ViewHolder {
         public FooterViewHolder(View view) {
             super(view);
         }
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public class GridSpacingItemDecoration extends RecyclerView.ItemDecoration {
         private float density;
         private boolean includeEdge;
@@ -177,7 +172,7 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
             this.includeEdge = z;
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.ItemDecoration
+        @Override
         public void getItemOffsets(Rect rect, View view, RecyclerView recyclerView, RecyclerView.State state) {
             int i;
             int childAdapterPosition = recyclerView.getChildAdapterPosition(view);
@@ -213,7 +208,7 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
             }
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.ItemDecoration
+        @Override
         public void seslOnDispatchDraw(Canvas canvas, RecyclerView recyclerView, RecyclerView.State state) {
             super.seslOnDispatchDraw(canvas, recyclerView, state);
             int childCount = recyclerView.getChildCount();
@@ -226,14 +221,12 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
         }
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public static class HeaderViewHolder extends ViewHolder {
         public HeaderViewHolder(View view) {
             super(view);
         }
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public class ListDividerItemDecoration extends RecyclerView.ItemDecoration {
         private Drawable mDivider;
         private int mDividerLeft;
@@ -247,7 +240,7 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
             this.mDividerLeft = (int) AppPickerView.this.getResources().getDimension(R.dimen.app_picker_list_icon_frame_width);
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.ItemDecoration
+        @Override
         public void onDraw(Canvas canvas, RecyclerView recyclerView, RecyclerView.State state) {
             super.onDraw(canvas, recyclerView, state);
             int childCount = recyclerView.getChildCount();
@@ -267,7 +260,7 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
             }
         }
 
-        @Override // androidx.recyclerview.widget.RecyclerView.ItemDecoration
+        @Override
         public void seslOnDispatchDraw(Canvas canvas, RecyclerView recyclerView, RecyclerView.State state) {
             super.seslOnDispatchDraw(canvas, recyclerView, state);
             int childCount = recyclerView.getChildCount();
@@ -280,17 +273,14 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
         }
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public interface OnBindListener {
         void onBindViewHolder(ViewHolder viewHolder, int i, String str);
     }
-
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
+    
     public interface OnSearchFilterListener {
         void onSearchFilterCompleted(int i);
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public static class SeparatorViewHolder extends ViewHolder {
         private final TextView mSeparatorText;
 
@@ -315,7 +305,6 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
         }
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public static class ViewHolder extends RecyclerView.ViewHolder {
         private final ImageButton mActionButton;
         private final ImageView mAppIcon;
@@ -500,8 +489,8 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
         if (layoutManager == null || !(layoutManager instanceof GridLayoutManager)) {
             return;
         }
-        ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() { // from class: androidx.apppickerview.widget.AppPickerView.2
-            @Override // androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+        ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
             public int getSpanSize(int i3) {
                 if (i3 < AppPickerView.this.mAdapter.getDataSet().size()) {
                     if (AppPickerView.this.mAdapter.getDataSet().get(i3).isCustomViewItem()) {
@@ -527,8 +516,8 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
         if (layoutManager == null || !(layoutManager instanceof GridLayoutManager)) {
             return;
         }
-        ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() { // from class: androidx.apppickerview.widget.AppPickerView.1
-            @Override // androidx.recyclerview.widget.GridLayoutManager.SpanSizeLookup
+        ((GridLayoutManager) layoutManager).setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
             public int getSpanSize(int i2) {
                 if (i2 < AppPickerView.this.mAdapter.getDataSet().size()) {
                     if (AppPickerView.this.mAdapter.getDataSet().get(i2).isCustomViewItem()) {
@@ -562,19 +551,19 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
         return this.mType;
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup, android.view.View
+    @Override
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         this.mAppPickerIconLoader.startIconLoaderThread();
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView, android.view.ViewGroup, android.view.View
+    @Override
     public void onDetachedFromWindow() {
         this.mAppPickerIconLoader.stopIconLoaderThread();
         super.onDetachedFromWindow();
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.RecyclerListener
+    @Override
     public void onViewRecycled(RecyclerView.ViewHolder viewHolder) {
         ViewHolder viewHolder2 = (ViewHolder) viewHolder;
         ImageButton actionButton = viewHolder2.getActionButton();
@@ -600,8 +589,8 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
     }
 
     public void refresh() {
-        post(new Runnable() { // from class: androidx.apppickerview.widget.AppPickerView.5
-            @Override // java.lang.Runnable
+        post(new Runnable() {
+            @Override
             public void run() {
                 Log.i(AppPickerView.TAG, "run refresh");
                 AppPickerView.this.mAdapter.notifyDataSetChanged();
@@ -610,8 +599,8 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
     }
 
     public void refreshUI() {
-        post(new Runnable() { // from class: androidx.apppickerview.widget.AppPickerView.3
-            @Override // java.lang.Runnable
+        post(new Runnable() {
+            @Override
             public void run() {
                 Log.i(AppPickerView.TAG, "run refreshUI");
                 AppPickerView.this.mAdapter.notifyItemRangeChanged(0, AppPickerView.this.mAdapter.getItemCount());
@@ -620,8 +609,8 @@ public class AppPickerView extends RecyclerView implements RecyclerView.Recycler
     }
 
     public void refreshUI(final int i) {
-        post(new Runnable() { // from class: androidx.apppickerview.widget.AppPickerView.4
-            @Override // java.lang.Runnable
+        post(new Runnable() {
+            @Override
             public void run() {
                 Log.i(AppPickerView.TAG, "run refreshUI by position");
                 AppPickerView.this.mAdapter.notifyItemChanged(i);
