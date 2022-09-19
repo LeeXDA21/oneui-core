@@ -9,14 +9,14 @@ import android.text.TextUtils;
 import android.widget.ImageView;
 import androidx.reflect.app.SeslApplicationPackageManagerReflector;
 
-/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
+// Credits to Samsung, all rights reserved to the original owners.
+
 public class AppPickerIconLoader {
     private static final String THREAD_NAME = "AppPickerIconLoader";
     private Context mContext;
     private LoadIconTask mLoadIconTask;
     private PackageManager mPackageManager;
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public static class IconInfo {
         public String activityName;
         public Drawable drawable = null;
@@ -30,7 +30,6 @@ public class AppPickerIconLoader {
         }
     }
 
-    /* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
     public class LoadIconTask extends AsyncTask<Void, Void, Drawable> {
         private final IconInfo mIconInfo;
 
@@ -38,14 +37,14 @@ public class AppPickerIconLoader {
             this.mIconInfo = iconInfo;
         }
 
-        @Override // android.os.AsyncTask
+        @Override
         public Drawable doInBackground(Void... voidArr) {
             AppPickerIconLoader appPickerIconLoader = AppPickerIconLoader.this;
             IconInfo iconInfo = this.mIconInfo;
             return appPickerIconLoader.getAppIcon(iconInfo.packageName, iconInfo.activityName);
         }
 
-        @Override // android.os.AsyncTask
+        @Override
         public void onPostExecute(Drawable drawable) {
             ImageView imageView;
             IconInfo iconInfo = this.mIconInfo;
@@ -61,7 +60,6 @@ public class AppPickerIconLoader {
         this.mPackageManager = context.getPackageManager();
     }
 
-    /* JADX INFO: Access modifiers changed from: private */
     public Drawable getAppIcon(String str, String str2) {
         if (str2 == null || str2.equals("")) {
             Drawable semGetApplicationIconForIconTray = SeslApplicationPackageManagerReflector.semGetApplicationIconForIconTray(this.mPackageManager, str, 1);
