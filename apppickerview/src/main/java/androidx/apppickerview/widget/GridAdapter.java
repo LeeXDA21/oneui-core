@@ -10,8 +10,9 @@ import androidx.apppickerview.R;
 import androidx.apppickerview.widget.AppPickerView;
 import androidx.recyclerview.widget.RecyclerView;
 
+// Credits to Samsung, all rights reserved to the original owners.
+
 @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
-/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
 public class GridAdapter extends AbsAdapter {
     private static final int TYPE_HEADER = 256;
     private static final int TYPE_ITEM = 257;
@@ -21,18 +22,17 @@ public class GridAdapter extends AbsAdapter {
         super(context, i, i2, appPickerIconLoader);
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemViewType(int i) {
         return getAppInfo(i).isSeparator() ? TYPE_SEPARATOR : getAppInfo(i).isCustomViewItem() ? -10 : 257;
     }
 
-    @Override // androidx.apppickerview.widget.AbsAdapter
+    @Override
     public void onBindViewHolderAction(AppPickerView.ViewHolder viewHolder, int i, String str) {
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
-    /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo209onCreateViewHolder(ViewGroup viewGroup, int i) {
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         if (i == TYPE_SEPARATOR) {
             return new AppPickerView.SeparatorViewHolder(LayoutInflater.from(this.mContext).inflate(R.layout.app_picker_list_separator, viewGroup, false));
         }
