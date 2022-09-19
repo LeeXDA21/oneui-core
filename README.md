@@ -26,7 +26,7 @@ Any form of contribution, suggestions, bug report or feature request will be wel
 ### Material Components:
 - [material](https://material.io/develop/android) [![](https://img.shields.io/maven-central/v/io.github.oneuiproject.sesl/material?color=%23C71A36&logoColor=%23C11920&style=flat-square)](https://mvnrepository.com/artifact/io.github.oneuiproject.sesl/material) (based on 1.0.42-sesl4)
 ### Samsung:
-- apppickerview [![](https://img.shields.io/maven-central/v/io.github.oneuiproject.sesl/apppickerview?color=%23C71A36&logoColor=%23C11920&style=flat-square)](https://mvnrepository.com/artifact/io.github.oneuiproject.sesl/apppickerview) (based on 1.0.18-sesl4)
+- apppickerview [![](https://img.shields.io/maven-central/v/io.github.oneuiproject.sesl/apppickerview?color=%23C71A36&logoColor=%23C11920&style=flat-square)](https://mvnrepository.com/artifact/io.github.oneuiproject.sesl/apppickerview) (based on 1.0.2-sesl5)
 - indexscroll [![](https://img.shields.io/maven-central/v/io.github.oneuiproject.sesl/indexscroll?color=%23C71A36&logoColor=%23C11920&style=flat-square)](https://mvnrepository.com/artifact/io.github.oneuiproject.sesl/indexscroll) (based on 1.0.14-sesl4)
 - picker-basic [![](https://img.shields.io/maven-central/v/io.github.oneuiproject.sesl/picker-basic?color=%23C71A36&logoColor=%23C11920&style=flat-square)](https://mvnrepository.com/artifact/io.github.oneuiproject.sesl/picker-basic) (based on 1.0.35-sesl4)
 - picker-color [![](https://img.shields.io/maven-central/v/io.github.oneuiproject.sesl/picker-color?color=%23C71A36&logoColor=%23C11920&style=flat-square)](https://mvnrepository.com/artifact/io.github.oneuiproject.sesl/picker-color) (based on 1.0.21-sesl4)
