@@ -11,8 +11,9 @@ import androidx.apppickerview.R;
 import androidx.apppickerview.widget.AppPickerView;
 import androidx.recyclerview.widget.RecyclerView;
 
+// Credits to Samsung, all rights reserved to the original owners.
+
 @RestrictTo({RestrictTo.Scope.LIBRARY_GROUP_PREFIX})
-/* loaded from: C:\Users\LeeXD\Documents\sesl5port\sesl5.dex */
 public class ListAdapter extends AbsAdapter {
     private static final int TYPE_FOOTER = 258;
     private static final int TYPE_HEADER = 256;
@@ -23,7 +24,7 @@ public class ListAdapter extends AbsAdapter {
         super(context, i, i2, appPickerIconLoader);
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
+    @Override
     public int getItemViewType(int i) {
         if (getAppInfo(i).isSeparator()) {
             return TYPE_SEPARATOR;
@@ -37,7 +38,7 @@ public class ListAdapter extends AbsAdapter {
         return i == getItemCount() - 1 ? 258 : 257;
     }
 
-    @Override // androidx.apppickerview.widget.AbsAdapter
+    @Override
     public void onBindViewHolderAction(final AppPickerView.ViewHolder viewHolder, int i, String str) {
         if (getItemViewType(i) == TYPE_SEPARATOR || getItemViewType(i) == -10) {
             return;
@@ -55,8 +56,8 @@ public class ListAdapter extends AbsAdapter {
             case 3:
                 viewHolder.getLeftConatiner().setVisibility(0);
                 viewHolder.getWidgetContainer().setVisibility(8);
-                viewHolder.getItem().setOnClickListener(new View.OnClickListener() { // from class: androidx.apppickerview.widget.ListAdapter.2
-                    @Override // android.view.View.OnClickListener
+                viewHolder.getItem().setOnClickListener(new View.OnClickListener() {
+                    @Override
                     public void onClick(View view) {
                         viewHolder.getCheckBox().setChecked(!viewHolder.getCheckBox().isChecked());
                     }
@@ -71,8 +72,8 @@ public class ListAdapter extends AbsAdapter {
             case 4:
                 viewHolder.getLeftConatiner().setVisibility(0);
                 viewHolder.getWidgetContainer().setVisibility(8);
-                viewHolder.getItem().setOnClickListener(new View.OnClickListener() { // from class: androidx.apppickerview.widget.ListAdapter.3
-                    @Override // android.view.View.OnClickListener
+                viewHolder.getItem().setOnClickListener(new View.OnClickListener() {
+                    @Override
                     public void onClick(View view) {
                         viewHolder.getRadioButton().setChecked(!viewHolder.getRadioButton().isChecked());
                     }
@@ -88,8 +89,8 @@ public class ListAdapter extends AbsAdapter {
             case 6:
                 viewHolder.getLeftConatiner().setVisibility(8);
                 viewHolder.getWidgetContainer().setVisibility(0);
-                viewHolder.getItem().setOnClickListener(new View.OnClickListener() { // from class: androidx.apppickerview.widget.ListAdapter.1
-                    @Override // android.view.View.OnClickListener
+                viewHolder.getItem().setOnClickListener(new View.OnClickListener() {
+                    @Override
                     public void onClick(View view) {
                         viewHolder.getSwitch().setChecked(!viewHolder.getSwitch().isChecked());
                     }
@@ -106,9 +107,8 @@ public class ListAdapter extends AbsAdapter {
         }
     }
 
-    @Override // androidx.recyclerview.widget.RecyclerView.Adapter
-    /* renamed from: onCreateViewHolder */
-    public RecyclerView.ViewHolder mo209onCreateViewHolder(ViewGroup viewGroup, int i) {
+    @Override
+    public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         int i2 = R.layout.app_picker_list;
         if (i == 256 && hasAllAppsInList()) {
             i2 = R.layout.app_picker_list_header;
